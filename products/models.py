@@ -10,4 +10,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class BrowsingHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering =  ['-viewed_at']  
 
