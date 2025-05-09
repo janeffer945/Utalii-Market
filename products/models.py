@@ -17,5 +17,5 @@ class BrowsingHistory(models.Model):
     viewed_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering =  ['-viewed_at']  
+       ordering =  ['-viewed_at']  
 
