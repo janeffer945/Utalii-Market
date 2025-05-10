@@ -43,3 +43,16 @@ class RecommendProductView(APIView):
         return Response({"recommended": recommended_products}, status=status.HTTP_200_OK)          
 
         
+class ViewProduct(APIView):
+    def post(self, request):
+        user = request.user
+        product_id = request.data.get('product_id')
+        if not user.is_authenticated:
+            return Response({"error": "User is not authenticated"}),
+            status-status.HTTP_401_UNAUTHORIZED
+        try:
+            product = Product.objects.get(id=product_id)
+            BrowsingHistory.objects.create(user=user, product=product)
+            return Response({"message": "Product view recorded"}, status=status.HTTP_201_CREATED)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
