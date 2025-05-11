@@ -79,7 +79,26 @@ def get_recommendations(request):
     unviewed_indices = [i for i, pid in enumerate(product_ids) if pid not in viewed_product_ids]
     unviewed_similarities = [(i, similarities[i]) for i in unviewed_indices]
     unviewed_similarities.sort(key=lambda x: x[1], reverse=True)
-    top_indices = [i for i, _ in unviewed_similarities[:3]]   
+    top_indices = [i for i, _ in unviewed_similarities[:3]]  
+
+    recommended_products = [all_products[i] for i in top_indices
+                            ]     
+    date = [{
+        'id' : Product.id,
+        'name' : Product.name,
+        'category': Product.category,
+        'price' : str(Product.price),
+        'tags' :Product.tags
+
+    } for product in recommended_products]
+
+    message = mock_openai_generate_message(categories, tags)
+
+    return JsonResponse({
+        'recommendations': data,
+        'message': message
+    })
+
     
 
 
