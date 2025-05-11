@@ -7,7 +7,7 @@ import numpy as np
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseBadRequest
 # Create your views here.
-
+# Recommendation message
 def mock_openai_generate_message(categories, tags):
     primary_category = max(set(categories), key=categories.count) if categories else "products"
     primary_tag = max(set(tags), key=tags.count) if tags else "great items"
@@ -18,6 +18,28 @@ def mock_openai_generate_message(categories, tags):
 
     ]
     return np.random.choice(templates)
+
+#API saves product view to browsing history
+@csrf_exempt
+@login_required
+def save_browsing_history(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("method not allowed")
+    
+    try: 
+        product_id = request.POST.GET('product_id')
+        if not product_id:
+            return HttpResponseBadRequest("product ID is required")
+
+        product = product.objects.get(id=product_id) 
+        BrowsingHistory.objects.create(user=request.user, product=product)
+        return JsonResponse({'status': 'success'})
+    except Product.DoesNotExist:
+        return HttpResponseBadRequest("Invalid product ID")
+    except Exception as e:
+        return HttpResponseBadRequest(f"Error: {str(e)}")
+
+
 class RecommendProductView(APIView):
     def get(self, request):
         user = request.user
