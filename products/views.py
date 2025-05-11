@@ -5,7 +5,7 @@ from rest_framework import status
 from .models import *
 from django.db.models import Q
 from collections import defaultdict
-
+from .serializers import BrowsingHistorySerializer
 # Create your views here.
 class RecommendProductView(APIView):
     def get(self, request):
@@ -56,3 +56,12 @@ class ViewProduct(APIView):
             return Response({"message": "Product view recorded"}, status=status.HTTP_201_CREATED)
         except Product.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class BrowsingHistoryView(APIView):
+    def get(self, request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response ({"error": "User not authenticated"}),
+        history = BrowsingHistory.objects.filter(user=user)[:5]
+        serializer = BrowsingHistorySerializer(history, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK) 
