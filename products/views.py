@@ -38,63 +38,49 @@ def save_browsing_history(request):
         return HttpResponseBadRequest("Invalid product ID")
     except Exception as e:
         return HttpResponseBadRequest(f"Error: {str(e)}")
+    
+#API that returns 3recommended products
+@login_required
+def get_recommendations(request):
+    user = request.user
+    #user browsing history
+    viewed_products = BrowsingHistory.objects.filter(user=user).selecr_related('product')
+    viewed_products_ids = [bh.product.id for bh in viewed_products]   
+
+    if not viewed_products:
+        return JsonResponse({'recommendations' : [],
+                            'message': "Browse some products to get personalized recommendations!"  })
+    
+    #Extract categories from viewed products
+    categories = [bh.product.category for bh in viewed_products]
+    tags = []
+    for bh in viewed_products:
+
+     tags.extend(bh.product.tags.split(','))
+    tags = [tag.strip() for tag in tags]  
+
+    all_products = Product.objects.all()
+    product_ids = [p.id for p in all_products]
+
+    feature_strings = [
+        f"{p.category} {' '.join(p.tags.split(','))}" for p in all_products
+    ]
+    
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(feature_strings)
+
+    viewed_indices = [i for i, pid in enumerate(product_ids) if pid in viewed_products_ids]
+    viewed_vectors = tfidf_matrix(viewed_indices)
+    avg_viewd_vector = np.mean(viewed_vectors, axis=0) if viewed_indices else None
+    
+    similarities  = cosine_similarity(avg_viewd_vector, tfidf_matrix).flatten()
+
+    #get 3 unvewied products
+    unviewed_indices = [i for i, pid in enumerate(product_ids) if pid not in viewed_product_ids]
+    unviewed_similarities = [(i, similarities[i]) for i in unviewed_indices]
+    unviewed_similarities.sort(key=lambda x: x[1], reverse=True)
+    top_indices = [i for i, _ in unviewed_similarities[:3]]   
+    
 
 
-class RecommendProductView(APIView):
-    def get(self, request):
-        user = request.user
-        if not user.is_authenticated:
-            return Response({"error": "User not authenticated"},
-            status=status.HTTP_401_UNAUTHORIZED)
-        
-        history = BrowsingHistory.objects.filter(user=user)[:5]
-        viewed_product_ids = [h.product.id for h in history]
-        viewed_categories = [h.product.category for h in history]
-        viewed_tags = []
-        for h in history:
-            viewed_tags.extend(h.product.tags.split(',')) 
 
-        scores = defaultdict(float)
-        for product in Product.objects.exclude(id__in=viewed_product_ids):
-            score = 0
-            if product.category in viewed_categories:
-                score += 2  # Weight for category match
-            product_tags = product.tags.split(',')
-            for tag in product_tags:
-                if tag in viewed_tags:
-                    score += 1  # Weight for each tag match
-            scores[product] = score  
-
-        
-        # Get top 3 products
-        recommended = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
-        recommended_products = [
-            {"id": p.id, "name": p.name, "category": p.category, "price": str(p.price), "tags": p.tags}
-            for p, _ in recommended
-        ]
-
-        return Response({"recommended": recommended_products}, status=status.HTTP_200_OK)          
-
-        
-class ViewProduct(APIView):
-    def post(self, request):
-        user = request.user
-        product_id = request.data.get('product_id')
-        if not user.is_authenticated:
-            return Response({"error": "User is not authenticated"}),
-            status-status.HTTP_401_UNAUTHORIZED
-        try:
-            product = Product.objects.get(id=product_id)
-            BrowsingHistory.objects.create(user=user, product=product)
-            return Response({"message": "Product view recorded"}, status=status.HTTP_201_CREATED)
-        except Product.DoesNotExist:
-            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
-
-class BrowsingHistoryView(APIView):
-    def get(self, request):
-        user = request.user
-        if not user.is_authenticated:
-            return Response ({"error": "User not authenticated"}),
-        history = BrowsingHistory.objects.filter(user=user)[:5]
-        serializer = BrowsingHistorySerializer(history, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK) 
