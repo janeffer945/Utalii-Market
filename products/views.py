@@ -1,12 +1,23 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import *
-from django.db.models import Q
-from collections import defaultdict
-from .serializers import BrowsingHistorySerializer
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Product, BrowsingHistory
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseBadRequest
 # Create your views here.
+
+def mock_openai_generate_message(categories, tags):
+    primary_category = max(set(categories), key=categories.count) if categories else "products"
+    primary_tag = max(set(tags), key=tags.count) if tags else "great items"
+    templates = [
+        f"Since you love{primary_category.lower()} Products, check out these recommendations!",
+        f"Based on your interest in {primary_tag.lower()} items, you might like these too!",
+        f"Explore more {primary_category.lower()} with {primary_tag.lower()} features!"
+
+    ]
+    return np.random.choice(templates)
 class RecommendProductView(APIView):
     def get(self, request):
         user = request.user
