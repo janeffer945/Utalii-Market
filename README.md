@@ -65,10 +65,10 @@ Supports filters for price range (min/max) and category, applied before similari
 ## Personalized Message:
  A mock OpenAI function generates messages based on the most frequent category or tag (e.g., "Based on your interest in Bluetooth items, you might like these too!").
 ## Logging: 
-Tracks recommendation clicks in the RecommendationClick model for analytics.
+Tracks recommendation clicks in the RecommendationClick model for analytics
 
-The system recommends 3 unviewed products, prioritizing those most similar to the user's browsing history.
 
+The system recommends 3 unviewed products, prioritizing those most similar to the user browsing history
 ## Project structure 
 marketplace-project/
 ├── marketplace/
@@ -103,4 +103,5 @@ Use filters (price range, category) to refine recommendations.
 Click recommended products to log clicks, tracked in the backend.
 View recommendations and personalized messages in the dedicated section.
 For issues or contributions, open a pull request or issue on the GitHub repository.
+
 
