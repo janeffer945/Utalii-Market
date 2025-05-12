@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'products',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,7 @@ DATABASES = {
         'PORT':'3306',
         'USER': 'root',
         'PASSWORD':'njeri',
+        
     }
 }
 
