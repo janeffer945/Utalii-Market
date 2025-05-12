@@ -41,14 +41,15 @@ python manage.py runserver
 ## Serve the frontend:
 ## Utalii Market 
 Installation
-
+npm install -g @angular/cli
 ng new utalii_market
+
 ## Run AngularJs Project
 ng Serve
 
 ## Test the Apllication:
  Create a user via Django admin (python manage.py createsuperuser and access /admin).
- Log in and browse products at http://localhost:8000/static/index.html.
+ Log in and browse products at http://localhost:4200.
 Click "ViewS" on products, apply filters, and click recommendations to test functionality.
 
 ## recommendation Approach
