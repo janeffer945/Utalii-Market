@@ -94,5 +94,10 @@ marketplace-project/
 
 
 
-
+## Usage
+Browse products and click "View" to log browsing history.
+Use filters (price range, category) to refine recommendations.
+Click recommended products to log clicks, tracked in the backend.
+View recommendations and personalized messages in the dedicated section.
+For issues or contributions, open a pull request or issue on the GitHub repository.
 
