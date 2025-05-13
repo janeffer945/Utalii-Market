@@ -51,8 +51,6 @@ python manage.py createsuperuser
 ## collectstatic
 python manage.py collectstatic
 
-##runserver
-python manage.py runserver
 
 ## Mock Data:
 python manage.py populate_products
