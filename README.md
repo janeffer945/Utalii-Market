@@ -4,7 +4,7 @@
 
 ## Author
 Janeffer Njeri: https://github.com/janeffer945  
-Features
+## Features
 1. User authentication (login/logout). 
 2. Browse products and save unique viewing history.
 3. Personalized recommendations (3 products) using cosine similarity.
