@@ -66,15 +66,15 @@ Place index.html in marketplace/templates/.
 Access the frontend at http://localhost:8000/.
 
 ## Endpoints
-GET /api/products/: List all products.
-POST /api/browsing-history/: Save product view ({ "product_id": 1 }).
-GET /api/browsing-history/: List users browsing history.
-GET /api/recommendations/: Get 3 recommendations, viewed, and unviewed products (?min_price=20&max_price=100&category=Electronics).
-POST /api/recommendation-click/: Log recommendation click ({ "product_id": 1 }).
-GET /api/recommendation-click/: List users recommendation clicks.
-GET /api/get-csrf-token/: Get CSRF token.
-POST /accounts/login/: Authenticate user.
-POST /accounts/logout/: Log out user.
+1. GET /api/products/: List all products.
+2. POST /api/browsing-history/: Save product view ({ "product_id": 1 }).
+3. GET /api/browsing-history/: List users browsing history.
+4. GET /api/recommendations/: Get 3 recommendations, viewed, and unviewed products (?min_price=20&max_price=100&category=Electronics).
+5. POST /api/recommendation-click/: Log recommendation click ({ "product_id": 1 }).
+6. GET /api/recommendation-click/: List users recommendation clicks.
+7. GET /api/get-csrf-token/: Get CSRF token.
+8. POST /accounts/login/: Authenticate user.
+9. POST /accounts/logout/: Log out user.
 
 ## recommendation Approach
 The recommendation system is content-based, using cosine similarity to suggest products based on user browsing history:
