@@ -75,20 +75,19 @@ P2. lace index.html in marketplace/templates/.
 9. POST /accounts/logout/: Log out user.
 
 ## recommendation Approach
-The recommendation system is content-based, using cosine similarity to suggest products based on user browsing history:
-## Feature Extraction:
+The recommendation system is content-based, using cosine similarity to suggest products based on user browsing history: 
+1. Feature Extraction:
 Each product is represented by its category and tags (e.g., "Electronics Bluetooth Touchscreen").
-## TF-IDF Vectorization:
+2. TF-IDF Vectorization:
 Converts product features into vectors using TfidfVectorizer from scikit-learn, emphasizing rare terms.
-## Similarity Calculation:
+3. Similarity Calculation:
  Computes the average TF-IDF vector of viewed products and compares it to all products using cosine similarity.
-#Filtering: 
+4. Filtering: 
 Supports filters for price range (min/max) and category, applied before similarity ranking.
-## Personalized Message:
+5. Personalized Message:
  A mock OpenAI function generates messages based on the most frequent category or tag (e.g., "Based on your interest in Bluetooth items, you might like these too!").
-## Logging: 
+6. Logging: 
 Tracks recommendation clicks in the RecommendationClick model for analytics
-
 The system recommends 3 unviewed products, prioritizing those most similar to the user browsing history
 
 
