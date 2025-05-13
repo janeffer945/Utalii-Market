@@ -25,9 +25,9 @@ Features
  mysqlclient
 
 ## Installation
- pip install Django
- django-admin startproject marktplace (.)
- django-admin startapp products
+ *pip install Django
+ *django-admin startproject marktplace (.)
+* django-admin startapp products
 
 ## Clone the Project
 https://github.com/janeffer945/Utalii-Market.git
