@@ -25,8 +25,8 @@ Features
  mysqlclient
 
 ## Installation
- *pip install Django
- *django-admin startproject marktplace (.)
+* pip install Django
+* django-admin startproject marktplace (.)
 * django-admin startapp products
 
 ## Clone the Project
