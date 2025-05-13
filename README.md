@@ -15,19 +15,19 @@ Features
 
 ## Setup Instructions
 ## Prerequisites
-• Python 3.8+
-• MySQL
-• Django 4.1
-• Django REST Framework
-• scikit-learn
-• drf-yasg
-• corsheaders
-• mysqlclient
+ Python 3.8+
+ MySQL
+ Django 4.1
+ Django REST Framework
+ scikit-learn
+ drf-yasg
+ corsheaders
+ mysqlclient
 
 ## Installation
-• pip install Django
-• django-admin startproject marktplace (.)
-• django-admin startapp products
+ pip install Django
+ django-admin startproject marktplace (.)
+ django-admin startapp products
 
 ## Clone the Project
 https://github.com/janeffer945/Utalii-Market.git
@@ -35,17 +35,17 @@ https://github.com/janeffer945/Utalii-Market.git
 
 
 ## Setup Virtual Environment:
-• python -m venv venv
-• source venv/bin/activate 
+ python -m venv venv
+ source venv/bin/activate 
 
-• On Windows: venv\Scripts\activate
+ On Windows: venv\Scripts\activate
 
 ## Install Dependencies:
 pip install -r requirements.txt
 
 ## Apply Migrations:
-• python manage.py makemigrations
-• python manage.py migrate
+ python manage.py makemigrations
+ python manage.py migrate
 
 ## createsuperuser
 • python manage.py createsuperuser
@@ -62,7 +62,7 @@ pip install -r requirements.txt
 
 ## Serve the frontend:
 1. Ensure index.html, app.js, and styles.css are in marketplace/static/.
-P2. lace index.html in marketplace/templates/.
+2. lace index.html in marketplace/templates/.
 3. Access the frontend at http://localhost:8000/.
 
 ## Endpoints
