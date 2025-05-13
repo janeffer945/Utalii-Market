@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html ng-app="marketplaceApp">
+<head>
+    <title>Marketplace</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body ng-controller="MainController">
+    <!-- Navbar Directive -->
+    <app-navbar></app-navbar>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Loading Spinner -->
+        <div ng-if="isLoading" class="text-center my-3">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Login/Logout Section -->
+        <div ng-if="!isAuthenticated">
+            <h3>Login</h3>
+            <div class="alert alert-danger" ng-if="loginError">{{ loginError }}</div>
+            <form ng-submit="login()">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" ng-model="loginData.username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" ng-model="loginData.password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
+        <div ng-if="isAuthenticated">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Welcome, {{ username }}!</h3>
+                <button class="btn btn-danger" ng-click="logout()">Logout</button>
+            </div>
+
+            <!-- Product Filters -->
+            <h4>Filter Products</h4>
+            <div class="alert alert-danger" ng-if="filterError">{{ filterError }}</div>
+            <form ng-submit="fetchRecommendations()">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="minPrice" class="form-label">Min Price</label>
+                        <input type="number" class="form-control" id="minPrice" ng-model="filters.minPrice" step="0.01">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="maxPrice" class="form-label">Max Price</label>
+                        <input type="number" class="form-control" id="maxPrice" ng-model="filters.maxPrice" step="0.01">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-control" id="category" ng-model="filters.category">
+                            <option value="">All Categories</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Sportswear">Sportswear</option>
+                            <option value="Home Appliances">Home Appliances</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary me-2">Get Recommendations</button>
+                    <button type="button" class="btn btn-secondary" ng-click="clearFilters()">Clear Filters</button>
+                </div>
+            </form>
+
+            <!-- Products List -->
+            <h4 class="mt-4">All Products</h4>
+            <!-- <div class="alert alert-danger" ng-if="apiError">{{ apiError }}</div> -->
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="product in products track by product.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">
+                                Category: {{ product.category }}<br>
+                                Price: ${{ product.price | number:2 }}<br>
+                                Tags: {{ product.tags }}
+                            </p>
+                            <button class="btn btn-primary" ng-click="viewProduct(product.id)">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Browsing History -->
+            <h4 class="mt-4">Your Browsing History</h4>
+            <div class="alert alert-info" ng-if="browsingHistory.length === 0">No browsing history recorded yet.</div>
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="entry in browsingHistory track by entry.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ entry.product_name }}</h5>
+                            <p class="card-text">
+                                Category: {{ entry.category }}<br>
+                                Price: ${{ entry.price | number:2 }}<br>
+                                Tags: {{ entry.tags }}<br>
+                                Viewed: {{ entry.viewed_at | date:'medium' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Viewed Products -->
+            <h4 class="mt-4">Your Viewed Products</h4>
+            <div class="alert alert-info" ng-if="viewedProducts.length === 0">No products viewed yet.</div>
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="product in viewedProducts track by product.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">
+                                Category: {{ product.category }}<br>
+                                Price: ${{ product.price | number:2 }}<br>
+                                Tags: {{ product.tags }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unviewed Products -->
+            <h4 class="mt-4">Unviewed Products</h4>
+            <div class="alert alert-info" ng-if="unviewedProducts.length === 0">All filtered products have been viewed.</div>
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="product in unviewedProducts track by product.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">
+                                Category: {{ product.category }}<br>
+                                Price: ${{ product.price | number:2 }}<br>
+                                Tags: {{ product.tags }}
+                            </p>
+                            <button class="btn btn-primary" ng-click="viewProduct(product.id)">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <h4 class="mt-4">Recommended Products</h4>
+            <div class="alert alert-success" ng-if="recommendations.length > 0">{{ recommendationsMessage }}</div>
+            <div class="alert alert-info" ng-if="recommendations.length === 0 && recommendationsMessage">{{ recommendationsMessage }}</div>
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="recommendation in recommendations track by recommendation.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recommendation.name }}</h5>
+                            <p class="card-text">
+                                Category: {{ recommendation.category }}<br>
+                                Price: ${{ recommendation.price | number:2 }}<br>
+                                Tags: {{ recommendation.tags }}
+                            </p>
+                            <button class="btn btn-success" ng-click="clickRecommendation(recommendation.id)">View Recommendation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendation Clicks -->
+            <h4 class="mt-4">Your Recommendation Clicks</h4>
+            <div class="alert alert-info" ng-if="clicks.length === 0">No recommendation clicks recorded yet.</div>
+            <div class="row">
+                <div class="col-md-4 mb-3" ng-repeat="click in clicks track by click.id">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ click.product_name }}</h5>
+                            <p class="card-text">
+                                Category: {{ click.category }}<br>
+                                Price: ${{ click.price | number:2 }}<br>
+                                Tags: {{ click.tags }}<br>
+                                Clicked: {{ click.timestamp | date:'medium' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Directive -->
+    <app-footer></app-footer>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="/static/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

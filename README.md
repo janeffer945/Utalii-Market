@@ -4,12 +4,25 @@
 
 ## Author
 Janeffer Njeri: https://github.com/janeffer945  
+Features
+1. User authentication (login/logout). 
+2. Browse products and save unique viewing history.
+3. Personalized recommendations (3 products) using cosine similarity.
+4. Filter recommendations by price and category.
+5. View browsing history, viewed, and unviewed products.
+6. Log and view clicks on recommended products.
+7. Swagger API documentation (/swagger/).
 
 ## Setup Instructions
 ## Prerequisites
-python3.8+
-Node.Js 
-Git 
+Python 3.8+
+MySQL
+Django 4.1
+Django REST Framework
+scikit-learn
+drf-yasg
+corsheaders
+mysqlclient
 
 ## Installation
 pip install Django
@@ -32,6 +45,15 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 
+## createsuperuser
+python manage.py createsuperuser
+
+## collectstatic
+python manage.py collectstatic
+
+##runserver
+python manage.py runserver
+
 ## Mock Data:
 python manage.py populate_products
 
@@ -39,18 +61,20 @@ python manage.py populate_products
 python manage.py runserver
 
 ## Serve the frontend:
-## Utalii Market 
-Installation
-npm install -g @angular/cli
-ng new utalii_market
+Ensure index.html, app.js, and styles.css are in marketplace/static/.
+Place index.html in marketplace/templates/.
+Access the frontend at http://localhost:8000/.
 
-## Run AngularJs Project
-ng Serve
-
-## Test the Apllication:
- Create a user via Django admin (python manage.py createsuperuser and access /admin).
- Log in and browse products at http://localhost:4200.
-Click "ViewS" on products, apply filters, and click recommendations to test functionality.
+## Endpoints
+GET /api/products/: List all products.
+POST /api/browsing-history/: Save product view ({ "product_id": 1 }).
+GET /api/browsing-history/: List users browsing history.
+GET /api/recommendations/: Get 3 recommendations, viewed, and unviewed products (?min_price=20&max_price=100&category=Electronics).
+POST /api/recommendation-click/: Log recommendation click ({ "product_id": 1 }).
+GET /api/recommendation-click/: List users recommendation clicks.
+GET /api/get-csrf-token/: Get CSRF token.
+POST /accounts/login/: Authenticate user.
+POST /accounts/logout/: Log out user.
 
 ## recommendation Approach
 The recommendation system is content-based, using cosine similarity to suggest products based on user browsing history:

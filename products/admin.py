@@ -4,3 +4,5 @@ from .models import *
 # Register your models here.
 admin.site.register(Product ),
 admin.site.register(BrowsingHistory)
+admin.site.register(RecommendationClick)
+
