@@ -15,14 +15,14 @@ Features
 
 ## Setup Instructions
 ## Prerequisites
- Python 3.8+
- MySQL
- Django 4.1
- Django REST Framework
- scikit-learn
- drf-yasg
- corsheaders
- mysqlclient
+* Python 3.8+
+* MySQL
+* Django 4.1
+* Django REST Framework
+* scikit-learn
+* drf-yasg
+* corsheaders
+* mysqlclient
 
 ## Installation
 * pip install Django
@@ -35,10 +35,10 @@ https://github.com/janeffer945/Utalii-Market.git
 
 
 ## Setup Virtual Environment:
- python -m venv venv
- source venv/bin/activate 
+* python -m venv venv
+* source venv/bin/activate 
 
- On Windows: venv\Scripts\activate
+* On Windows: venv\Scripts\activate
 
 ## Install Dependencies:
 pip install -r requirements.txt
