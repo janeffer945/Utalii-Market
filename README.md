@@ -59,9 +59,9 @@ python manage.py populate_products
 python manage.py runserver
 
 ## Serve the frontend:
-Ensure index.html, app.js, and styles.css are in marketplace/static/.
-Place index.html in marketplace/templates/.
-Access the frontend at http://localhost:8000/.
+1. Ensure index.html, app.js, and styles.css are in marketplace/static/.
+P2. lace index.html in marketplace/templates/.
+3. Access the frontend at http://localhost:8000/.
 
 ## Endpoints
 1. GET /api/products/: List all products.
