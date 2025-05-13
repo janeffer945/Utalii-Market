@@ -44,8 +44,8 @@ https://github.com/janeffer945/Utalii-Market.git
 pip install -r requirements.txt
 
 ## Apply Migrations:
- python manage.py makemigrations
- python manage.py migrate
+* python manage.py makemigrations
+* python manage.py migrate
 
 ## createsuperuser
 • python manage.py createsuperuser
