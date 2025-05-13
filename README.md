@@ -91,34 +91,7 @@ Supports filters for price range (min/max) and category, applied before similari
 ## Logging: 
 Tracks recommendation clicks in the RecommendationClick model for analytics
 
-
 The system recommends 3 unviewed products, prioritizing those most similar to the user browsing history
-## Project structure 
-marketplace-project/
-├── marketplace/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── views.py
-│   ├── urls.py
-│   ├── management/
-│   │   ├── __init__.py
-│   │   └── commands/
-│   │       ├── __init__.py
-│   │       └── seed_data.py
-│   └── migrations/
-│       ├── __init__.py
-│       └── (generated migration files)
-├── static/
-│   └── index.html
-├── project/
-│   ├── __init__.py
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── manage.py
-├── requirements.txt
-└── README.md
-
 
 
 ## Usage
